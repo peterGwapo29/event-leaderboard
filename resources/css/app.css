@@ -148,6 +148,20 @@
     --sidebar-ring: oklch(0.439 0 0);
 }
 
+.no-spinner {
+    -moz-appearance: textfield;
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+}
+
+.icon{
+    color: red
+}
+
 @layer base {
     * {
         @apply border-border;
