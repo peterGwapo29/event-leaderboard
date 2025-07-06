@@ -3,11 +3,11 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head } from '@inertiajs/react';
-import { useForm } from '@inertiajs/react'
+import { Head, useForm } from '@inertiajs/react';
 import React from 'react';
 import { TriangleAlert } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -18,7 +18,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function create() {
-
+    
     const {data, setData, post, processing, errors} = useForm({
         student_id: '',
         first_name: '',
@@ -64,7 +64,6 @@ export default function create() {
                             </AlertDescription>
                         </Alert>
                     )}
-
                     <div className=''>
                         <Label htmlFor='student_id'>Student ID</Label>
                         <Input value={data.student_id} placeholder='Student ID' onChange={ (e) => setData('student_id', e.target.value)} className='no-spinner'></Input>

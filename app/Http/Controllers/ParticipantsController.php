@@ -27,6 +27,6 @@ class ParticipantsController extends Controller
         ]);
 
         Participants::create($request->all());
-        return redirect()->route('participants.index');
+        return redirect()->route('participants.index')->with('message', 'Participants inserted successfully.');
     }
 }
