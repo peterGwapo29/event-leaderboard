@@ -13,9 +13,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
 
-     Route::get('/participants', [ParticipantsController::class, 'index'])->name('participants.index');
-     Route::post('/participants', [ParticipantsController::class, 'store'])->name('participants.store');
-     Route::get('/participants/create', [ParticipantsController::class, 'create'])->name('participants.create');
+    Route::get('/participants', [ParticipantsController::class, 'index'])->name('participants.index');
+    Route::post('/participants', [ParticipantsController::class, 'store'])->name('participants.store');
+    Route::get('/participants/create', [ParticipantsController::class, 'create'])->name('participants.create');
+    Route::delete('/participants/{student_id}', [ParticipantsController::class, 'destroy'])->name('participants.destroy');
+
 });
 
 require __DIR__.'/settings.php';

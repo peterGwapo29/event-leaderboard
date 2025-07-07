@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Participants;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\DB;
 
 class ParticipantsController extends Controller
 {
     public function index() {
-        return Inertia::render("Participants/participants");
+        $participants = Participants::all();
+        return Inertia::render("Participants/participants", compact('participants'));
     }
 
     public function create(){
@@ -28,5 +30,9 @@ class ParticipantsController extends Controller
 
         Participants::create($request->all());
         return redirect()->route('participants.index')->with('message', 'Participants inserted successfully.');
+    }
+    public function destroy($student_id) {
+        DB::table('participants')->where('student_id', $student_id)->delete();
+        return redirect()->route('participants.index')->with('message', 'Participants deleted successfully.');
     }
 }
