@@ -1,57 +1,58 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import AppLayout from '@/layouts/app-layout';
 import { Head, useForm } from '@inertiajs/react';
 import React from 'react';
 import { TriangleAlert, X } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
+interface Participants {
+    student_id: string;
+    first_name: string;
+    last_name: string;
+    middle_name: string;
+    course: string;
+    year_level: number;
+}
 
 interface Props {
+  participants: Participants;
   onClose: () => void;
 }
 
-export default function create({ onClose }: Props) {
+export default function edit( { participants, onClose }: Props) {
     
-    const {data, setData, post, processing, errors} = useForm({
-        student_id: '',
-        first_name: '',
-        last_name: '',
-        middle_name: '',
-        course: '',
-        year_level: '',
+    const {data, setData, put, processing, errors} = useForm({
+        student_id: participants.student_id,
+        first_name: participants.first_name,
+        last_name: participants.last_name,
+        middle_name: participants.middle_name,
+        course: participants.course,
+        year_level: participants.year_level,
     });
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleUpdate = (e: React.FormEvent) => {
         e.preventDefault();
-        console.log(data);
-        post(route('participants.store'), {
-            onSuccess: () => {
-                setData({
-                        student_id: '',
-                        first_name: '',
-                        last_name: '',
-                        middle_name: '',
-                        course: '',
-                        year_level: '',
-                });
-                onClose();
-            }
+        put(route('participants.update', participants.student_id), {
+        preserveScroll: true,
+        onSuccess: () => {
+            onClose();
+        },
         });
-    }
-
+    };
+    
     return (
         <>
-            <Head title="Create Participant" />
+            <Head title="Edit Participant" />
 
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-                <div className="relative w-full max-w-2xl rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">
-                    <button onClick={onClose} className="absolute cursor-pointer top-3 right-3 text-gray-500 hover:text-red-400 dark:hover:text-red-600">
+                <div className="relative w-full max-w-2xl rounded-lg bg-white p-6 dark:bg-gray-800">
+                    <strong>{`Update participant: ${participants.first_name} ${participants.middle_name} ${participants.last_name}`}</strong>
+                    <button onClick={onClose} className="close-modal-edit absolute cursor-pointer top-3 right-3 text-gray-500 hover:text-red-400 dark:hover:text-red-600">
                         <X />
                     </button>
 
-                    <form onSubmit={handleSubmit} className="mt-4 space-y-4">
+                    <form onSubmit={handleUpdate} className="mt-4 space-y-4 text-start">
                         {Object.keys(errors).length > 0 && (
                             <Alert>
                                 <TriangleAlert className="icon" />
@@ -92,7 +93,7 @@ export default function create({ onClose }: Props) {
                         </div>
 
                         <div className='flex flex-col w-full gap-2'>
-                            <div className=''>
+                            <div className='flex flex-col'>
                                 <Label htmlFor="course">Course</Label>
                                 <select value={data.course} onChange={(e) => setData('course', e.target.value)} className="form-select border border-gray-200 shadow-xs rounded-md w-full p-2">
                                     <option value="" hidden>
@@ -105,9 +106,9 @@ export default function create({ onClose }: Props) {
                                 </select>
                             </div>
 
-                             <div>
+                             <div className='flex flex-col'>
                                 <Label htmlFor="year_level">Year Level</Label>
-                                <select value={data.year_level} onChange={(e) => setData('year_level', e.target.value)} className="form-select border border-gray-200 shadow-xs rounded-md w-full p-2">
+                                <select value={data.year_level} onChange={(e) => setData('year_level', Number(e.target.value))} className="form-select border border-gray-200 shadow-xs rounded-md w-full p-2">
                                     <option value="" hidden>
                                         Select Year Level
                                     </option>
@@ -120,7 +121,10 @@ export default function create({ onClose }: Props) {
                             
                         </div>
 
-                        <Button disabled={processing} type="submit" className="w-full bg-green-800 font-normal text-white hover:bg-green-700">
+                        <Button 
+                            disabled={processing} 
+                            type="submit" className="w-full bg-green-800 font-normal text-white hover:bg-green-700"
+                            >
                             Submit
                         </Button>
                     </form>

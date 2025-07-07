@@ -4,8 +4,12 @@ import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, Tabl
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link, useForm, usePage } from '@inertiajs/react';
+import { useState  } from 'react';
 import { CheckCheck, UserRoundPlus } from 'lucide-react';
 import Swal from 'sweetalert2'
+import CreateModal from './create'
+import EditModal from './edit'
+
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -34,6 +38,9 @@ interface PageProps {
 export default function participants() {
     const { flash, participants } = usePage<PageProps>().props;
     const { processing, delete: destroy } = useForm();
+    const [showModal, setShowModal] = useState(false);
+    const [showModalEdit, setShowModalEdit] = useState(false);
+    const [selectedParticipant, setSelectedParticipant] = useState<Participants | null>(null);
 
     function handleDelete(student_id: string, first_name: string, last_name: string, middle_name: string) {
         Swal.fire({
@@ -71,12 +78,28 @@ export default function participants() {
             </div>
 
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
-                <Link href={route('participants.create')}>
-                    <Button className="cursor-pointer bg-green-700 text-white hover:bg-green-600">
+                <div>
+                    {showModal && <CreateModal onClose={() => setShowModal(false)} />}
+                    <Button
+                        onClick={() => {
+                            setShowModal(true);
+                        }}
+                        className="cursor-pointer bg-green-700 text-white hover:bg-green-600"
+                    >
                         <UserRoundPlus />
                         Add Participants
                     </Button>
-                </Link>
+
+                    {showModalEdit && selectedParticipant && (
+                        <EditModal
+                            participants={selectedParticipant}
+                            onClose={() => {
+                                setSelectedParticipant(null);
+                                setShowModalEdit(false);
+                            }}
+                        />
+                    )}
+                </div>
 
                 <div>
                     {participants.length > 0 && (
@@ -103,8 +126,21 @@ export default function participants() {
                                         <TableCell>{key.course}</TableCell>
                                         <TableCell>{key.year_level}</TableCell>
                                         <TableCell className="flex flex-row justify-center gap-2 text-center">
-                                            <Button className="cursor-pointer bg-blue-500 hover:bg-blue-400 dark:text-white">Edit</Button>
-                                            <Button disabled={processing} onClick={() => handleDelete(key.student_id, key.first_name, key.last_name, key.middle_name)} className="cursor-pointer bg-red-600 hover:bg-red-500 dark:text-white">
+                                            <Button
+                                                className="cursor-pointer bg-blue-500 hover:bg-blue-400 dark:bg-blue-700 dark:text-white dark:hover:bg-blue-600"
+                                                disabled={processing}
+                                                onClick={() => {
+                                                    setSelectedParticipant(key);
+                                                    setShowModalEdit(true);
+                                                }}
+                                            >
+                                                Edit
+                                            </Button>
+                                            <Button
+                                                disabled={processing}
+                                                onClick={() => handleDelete(key.student_id, key.first_name, key.last_name, key.middle_name)}
+                                                className="cursor-pointer bg-red-600 hover:bg-red-500 dark:bg-red-700 dark:text-white dark:hover:bg-red-600"
+                                            >
                                                 Delete
                                             </Button>
                                         </TableCell>

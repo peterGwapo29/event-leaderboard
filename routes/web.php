@@ -16,6 +16,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/participants', [ParticipantsController::class, 'index'])->name('participants.index');
     Route::post('/participants', [ParticipantsController::class, 'store'])->name('participants.store');
     Route::get('/participants/create', [ParticipantsController::class, 'create'])->name('participants.create');
+    Route::get('/participants/{student_id}/edit', [ParticipantsController::class, 'edit'])->name('participants.edit');
+    Route::put('/participants/{student_id}', [ParticipantsController::class, 'update'])->name('participants.update');
     Route::delete('/participants/{student_id}', [ParticipantsController::class, 'destroy'])->name('participants.destroy');
 
 });
