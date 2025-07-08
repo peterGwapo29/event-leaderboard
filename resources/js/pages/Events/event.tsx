@@ -9,6 +9,7 @@ import { useState, useEffect } from 'react';
 import CreateModal from './create';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import Swal from 'sweetalert2';
+import EditModal from './edit'
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -39,6 +40,8 @@ export default function event() {
     const [openPopoverId, setOpenPopoverId] = useState<number | null>(null);
     const [showNotif, setShowNotif] = useState(true);
     const { processing, delete: destroy } = useForm();
+    const [selectedParticipant, setSelectedParticipant] = useState<Events | null>(null);
+    const [showModalEdit, setShowModalEdit] = useState(false);
 
     const handleStatusChange = (eventId: number, newStatus: string) => {
         router.put(
@@ -130,7 +133,7 @@ export default function event() {
                         Add Event
                     </Button>
 
-                    {/* {showModalEdit && selectedParticipant && (
+                    {showModalEdit && selectedParticipant && (
                     <EditModal
                         events={selectedParticipant}
                         onClose={() => {
@@ -138,7 +141,7 @@ export default function event() {
                             setShowModalEdit(false);
                         }}
                     />
-                )} */}
+                )}
                 </div>
 
                 <div>
@@ -199,7 +202,7 @@ export default function event() {
                                         </TableCell>
 
                                         <TableCell className="flex flex-row justify-center gap-2 text-center">
-                                            {/* <Button
+                                            <Button
                                                 className="cursor-pointer bg-blue-500 hover:bg-blue-400 dark:bg-blue-700 dark:text-white dark:hover:bg-blue-600"
                                                 disabled={processing}
                                                 onClick={() => {
@@ -208,7 +211,7 @@ export default function event() {
                                                 }}
                                             >
                                                 Edit
-                                            </Button> */}
+                                            </Button>
                                             <Button
                                                 disabled={processing}
                                                 onClick={() => handleDelete(key.id, key.name)}

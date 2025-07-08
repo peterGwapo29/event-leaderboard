@@ -26,6 +26,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/events', [EventsController::class, 'index'])->name('events.index');
     Route::post('/events', [EventsController::class, 'store'])->name('events.store');
     Route::get('/events/create', [EventsController::class, 'create'])->name('events.create');
+    Route::get('/events/{id}/edit', [EventsController::class, 'edit'])->name('events.edit');
+    Route::put('/events/{id}/update', [EventsController::class, 'update'])->name('events.update');
     Route::put('/events/{id}', [EventsController::class, 'changeStatus'])->name('events.changeStatus');
     Route::delete('/events/{student_id}', [EventsController::class, 'destroy'])->name('events.destroy');
 

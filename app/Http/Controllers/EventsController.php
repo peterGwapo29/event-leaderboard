@@ -30,6 +30,35 @@ class EventsController extends Controller
         return redirect()->route('events.index')->with('message', 'Events inserted successfully.');
     }
 
+    public function edit(Event $events)
+    {
+        return Inertia::render("Events/edit", compact('events'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'category' => 'required|string|max:255',
+        ]);
+
+        $updated = DB::table('events')
+            ->where('id', $id)
+            ->update([
+                'id' => $request->input('id'),
+                'name' => $request->input('name'),
+                'description' => $request->input('description'),
+                'category' => $request->input('category'),
+            ]);
+
+        if ($updated === 0) {
+            return redirect()->route('events.index')->with('message', 'No changes made or event not found.');
+        }
+
+        return redirect()->route('events.index')->with('message', 'Events updated successfully.');
+    }
+
     public function changeStatus(Request $request, $id){
 
         DB::table('events')
