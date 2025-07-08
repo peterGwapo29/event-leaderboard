@@ -1,0 +1,43 @@
+<?php
+
+namespace App\Http\Controllers;
+use Inertia\Inertia;
+use Illuminate\Http\Request;
+use App\Models\Event;
+use Illuminate\Support\Facades\DB;
+
+class EventsController extends Controller
+{
+    public function index(){
+        $events = Event::all();
+        return Inertia::render("Events/event", compact('events'));
+    }
+
+     public function create()
+    {
+        return Inertia::render("Events/create");
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
+            'category' => 'required|string|max:255',
+        ]);
+
+        Event::create($request->all());
+        return redirect()->route('events.index')->with('message', 'Events inserted successfully.');
+    }
+
+    public function changeStatus(Request $request, $id){
+
+        DB::table('events')
+            ->where('id', $id)
+            ->update([
+                'status' => $request->input('status'),
+            ]);
+
+        return redirect()->route('events.index')->with('message', 'Event status change successfully');
+    }
+}

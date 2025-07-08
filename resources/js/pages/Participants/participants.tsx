@@ -3,13 +3,12 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head, Link, useForm, usePage } from '@inertiajs/react';
-import { useState  } from 'react';
+import { Head, useForm, usePage } from '@inertiajs/react';
 import { CheckCheck, UserRoundPlus } from 'lucide-react';
-import Swal from 'sweetalert2'
-import CreateModal from './create'
-import EditModal from './edit'
-
+import { useEffect, useState } from 'react';
+import Swal from 'sweetalert2';
+import CreateModal from './create';
+import EditModal from './edit';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -41,39 +40,54 @@ export default function participants() {
     const [showModal, setShowModal] = useState(false);
     const [showModalEdit, setShowModalEdit] = useState(false);
     const [selectedParticipant, setSelectedParticipant] = useState<Participants | null>(null);
+    const [showNotif, setShowNotif] = useState(true);
+
+    const sortedParticipants = [...participants].sort((a, b) =>
+        a.student_id.localeCompare(b.student_id)
+    );
 
     function handleDelete(student_id: string, first_name: string, last_name: string, middle_name: string) {
         Swal.fire({
-          title: "Are you sure you want to delete?",
-          text: `Participants: ${first_name} ${last_name}, ${middle_name} `,
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
-          confirmButtonText: "Yes, delete it!"
+            title: 'Are you sure you want to delete?',
+            text: `Participants: ${first_name} ${last_name}, ${middle_name} `,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!',
         }).then((result) => {
-          if (result.isConfirmed) {
-            Swal.fire({
-              title: "Deleted!",
-              text: `Participants ${student_id} ${first_name} ${last_name}, ${middle_name} has been deleted.`,
-              icon: "success"
-            });
-            destroy(route('participants.destroy', student_id));
-          }
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Deleted!',
+                    text: `Participants ${student_id} ${first_name} ${last_name}, ${middle_name} has been deleted.`,
+                    icon: 'success',
+                });
+                destroy(route('participants.destroy', student_id));
+            }
         });
     }
+
+    useEffect(() => {
+        if (flash?.message) {
+            setShowNotif(true);
+            const timeout = setTimeout(() => setShowNotif(false), 3000);
+            return () => clearTimeout(timeout);
+        }
+    }, [flash?.message]);
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Participants" />
 
-            <div>
-                {flash?.message && (
-                    <Alert>
-                        <CheckCheck />
-                        <AlertTitle>Heads up!</AlertTitle>
-                        <AlertDescription>{flash.message}</AlertDescription>
-                    </Alert>
+            <div className="notification-bar">
+                {flash?.message && showNotif && (
+                    <div className="notification-bar">
+                        <Alert>
+                            <CheckCheck className='icon-notif'/>
+                            <AlertTitle>Heads up!</AlertTitle>
+                            <AlertDescription>{flash.message}</AlertDescription>
+                        </Alert>
+                    </div>
                 )}
             </div>
 
@@ -87,7 +101,7 @@ export default function participants() {
                         className="cursor-pointer bg-green-700 text-white hover:bg-green-600"
                     >
                         <UserRoundPlus />
-                        Add Participants
+                        Add Participant
                     </Button>
 
                     {showModalEdit && selectedParticipant && (
@@ -102,9 +116,8 @@ export default function participants() {
                 </div>
 
                 <div>
-                    {participants.length > 0 && (
+                    {sortedParticipants.length > 0 && (
                         <Table>
-                            <TableCaption>A list of your recent invoices.</TableCaption>
                             <TableHeader>
                                 <TableRow>
                                     <TableHead className="w-[100px]">Student ID</TableHead>
@@ -117,7 +130,7 @@ export default function participants() {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {participants.map((key) => (
+                                {sortedParticipants.map((key) => (
                                     <TableRow key={key.student_id}>
                                         <TableCell className="font-medium">{key.student_id}</TableCell>
                                         <TableCell>{key.first_name}</TableCell>

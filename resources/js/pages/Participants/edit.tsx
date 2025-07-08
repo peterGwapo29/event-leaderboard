@@ -123,7 +123,7 @@ export default function edit( { participants, onClose }: Props) {
 
                         <Button 
                             disabled={processing} 
-                            type="submit" className="w-full bg-green-800 font-normal text-white hover:bg-green-700"
+                            type="submit" className="w-full bg-green-800 font-normal text-white cursor-pointer hover:bg-green-700"
                             >
                             Submit
                         </Button>

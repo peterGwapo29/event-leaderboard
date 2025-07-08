@@ -120,7 +120,7 @@ export default function create({ onClose }: Props) {
                             
                         </div>
 
-                        <Button disabled={processing} type="submit" className="w-full bg-green-800 font-normal text-white hover:bg-green-700">
+                        <Button disabled={processing} type="submit" className="w-full bg-green-800 font-normal text-white cursor-pointer hover:bg-green-700">
                             Submit
                         </Button>
                     </form>
