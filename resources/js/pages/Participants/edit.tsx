@@ -35,6 +35,7 @@ export default function edit( { participants, onClose }: Props) {
         e.preventDefault();
         put(route('participants.update', participants.student_id), {
         preserveScroll: true,
+        preserveState: false,
         onSuccess: () => {
             onClose();
         },

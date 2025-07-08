@@ -25,7 +25,6 @@ export default function create({ onClose }: Props) {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        console.log(data);
         post(route('participants.store'), {
             onSuccess: () => {
                 setData({
@@ -37,7 +36,9 @@ export default function create({ onClose }: Props) {
                         year_level: '',
                 });
                 onClose();
-            }
+            },
+                preserveScroll: true,
+                preserveState: false,
         });
     }
 

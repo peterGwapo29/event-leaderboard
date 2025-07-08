@@ -4,9 +4,10 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, router, usePage } from '@inertiajs/react';
-import { CalendarPlus2, CircleEllipsis } from 'lucide-react';
-import { useState } from 'react';
+import { CalendarPlus2, CircleEllipsis, CheckCheck } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import CreateModal from './create';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -34,6 +35,8 @@ interface PageProps {
 export default function event() {
     const [showModal, setShowModal] = useState(false);
     const { flash, events } = usePage<PageProps>().props;
+    const [openPopoverId, setOpenPopoverId] = useState<number | null>(null);
+    const [showNotif, setShowNotif] = useState(true);
 
     const handleStatusChange = (eventId: number, newStatus: string) => {
         router.put(
@@ -43,13 +46,45 @@ export default function event() {
             },
             {
                 preserveScroll: true,
+                preserveState: false,
             },
         );
+    };
+
+    useEffect(() => {
+            if (flash?.message) {
+                setShowNotif(true);
+                const timeout = setTimeout(() => setShowNotif(false), 3000);
+                return () => clearTimeout(timeout);
+            }
+        }, [flash?.message]);
+
+    const getStatusClass = (status: string) => {
+        switch (status.toLowerCase()) {
+            case 'upcoming':
+                return 'bg-blue-100 text-blue-700 hover:bg-blue-200 hover:text-blue-800';
+            case 'completed':
+                return 'bg-gray-200 text-gray-800 hover:bg-gray-300 hover:text-gray-900';
+            case 'ongoing':
+                return 'bg-green-100 text-green-700 hover:bg-green-300 hover:text-green-900';
+        }
     };
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Events" />
+
+            <div className="notification-bar">
+                {flash?.message && showNotif && (
+                    <div className="notification-bar">
+                        <Alert>
+                            <CheckCheck className="icon-notif" />
+                            <AlertTitle>Heads up!</AlertTitle>
+                            <AlertDescription>{flash.message}</AlertDescription>
+                        </Alert>
+                    </div>
+                )}
+            </div>
 
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div>
@@ -93,31 +128,40 @@ export default function event() {
                                     <TableRow key={key.id}>
                                         <TableCell className="font-medium">{key.id}</TableCell>
                                         <TableCell className="font-medium">{key.name}</TableCell>
-                                        <TableCell>{key.description}</TableCell>
+                                        <TableCell className='max-w-0 truncate'>{key.description}</TableCell>
                                         <TableCell>{key.category}</TableCell>
                                         <TableCell className="text-center">
-                                            <Popover>
+                                            <Popover
+                                                open={openPopoverId === key.id}
+                                                onOpenChange={(open) => {
+                                                    setOpenPopoverId(open ? key.id : null);
+                                                }}
+                                            >
                                                 <PopoverTrigger asChild>
-                                                    <Button className="cursor-pointer bg-blue-100 text-blue-700 hover:bg-blue-200 hover:text-blue-800">
+                                                    <Button className={`cursor-pointer w-32 h-10 justify-between ${getStatusClass(key.status)}`}>
                                                         {key.status} <CircleEllipsis className="ml-2" />
                                                     </Button>
                                                 </PopoverTrigger>
+
                                                 <PopoverContent className="w-40 p-2 text-sm">
                                                     <div className="flex flex-col gap-2">
-                                                        <Button
-                                                            variant="ghost"
-                                                            className="cursor-pointer justify-start"
-                                                            onClick={() => handleStatusChange(key.id, 'Upcoming')}
-                                                        >
-                                                            Upcoming
-                                                        </Button>
-                                                        <Button
-                                                            variant="ghost"
-                                                            className="cursor-pointer justify-start"
-                                                            onClick={() => handleStatusChange(key.id, 'Completed')}
-                                                        >
-                                                            Completed
-                                                        </Button>
+                                                        {['Ongoing', 'Upcoming', 'Completed'].map((status) => (
+                                                            <Button
+                                                                key={status}
+                                                                variant="ghost"
+                                                                className={getStatusClass(status)}
+                                                                onClick={() => {
+                                                                    if (status === key.status) {
+                                                                        setOpenPopoverId(null);
+                                                                        return;
+                                                                    }
+                                                                    handleStatusChange(key.id, status);
+                                                                    setOpenPopoverId(null);
+                                                                }}
+                                                            >
+                                                                {status}
+                                                            </Button>
+                                                        ))}
                                                     </div>
                                                 </PopoverContent>
                                             </Popover>

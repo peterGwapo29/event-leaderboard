@@ -1,19 +1,17 @@
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Head, useForm } from '@inertiajs/react';
-import React from 'react';
 import { TriangleAlert, X } from 'lucide-react';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-
+import React from 'react';
 
 interface Props {
-  onClose: () => void;
+    onClose: () => void;
 }
 
 export default function create({ onClose }: Props) {
-    
-    const {data, setData, post, processing, errors} = useForm({
+    const { data, setData, post, processing, errors } = useForm({
         name: '',
         description: '',
         category: '',
@@ -22,7 +20,6 @@ export default function create({ onClose }: Props) {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        console.log(data);
         post(route('events.store'), {
             onSuccess: () => {
                 setData({
@@ -32,13 +29,15 @@ export default function create({ onClose }: Props) {
                     status: 'Ongoing',
                 });
                 onClose();
-            }
+            },
+            preserveScroll: true,
+            preserveState: false,
         });
-    }
+    };
 
     return (
         <>
-            <Head title="Create Participant"/>
+            <Head title="Create Participant" />
 
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
                 <div className="relative w-full max-w-2xl rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">
@@ -91,5 +90,4 @@ export default function create({ onClose }: Props) {
             </div>
         </>
     );
-
 }

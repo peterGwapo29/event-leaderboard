@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head, useForm, usePage } from '@inertiajs/react';
+import { Head, useForm, usePage, router } from '@inertiajs/react';
 import { CheckCheck, UserRoundPlus } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
@@ -56,13 +56,21 @@ export default function participants() {
             cancelButtonColor: '#d33',
             confirmButtonText: 'Yes, delete it!',
         }).then((result) => {
+
             if (result.isConfirmed) {
                 Swal.fire({
                     title: 'Deleted!',
                     text: `Participants ${student_id} ${first_name} ${last_name}, ${middle_name} has been deleted.`,
                     icon: 'success',
                 });
-                destroy(route('participants.destroy', student_id));
+                destroy(route('participants.destroy', student_id), {
+                    onSuccess: () => {
+                        router.visit(route('participants.index'), {
+                            preserveScroll: true,
+                            preserveState: false,
+                        });
+                    },
+                });
             }
         });
     }
@@ -83,7 +91,7 @@ export default function participants() {
                 {flash?.message && showNotif && (
                     <div className="notification-bar">
                         <Alert>
-                            <CheckCheck className='icon-notif'/>
+                            <CheckCheck className="icon-notif" />
                             <AlertTitle>Heads up!</AlertTitle>
                             <AlertDescription>{flash.message}</AlertDescription>
                         </Alert>
