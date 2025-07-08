@@ -3,11 +3,12 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head, router, usePage } from '@inertiajs/react';
+import { Head, router, useForm, usePage } from '@inertiajs/react';
 import { CalendarPlus2, CircleEllipsis, CheckCheck } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import CreateModal from './create';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import Swal from 'sweetalert2';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -37,6 +38,7 @@ export default function event() {
     const { flash, events } = usePage<PageProps>().props;
     const [openPopoverId, setOpenPopoverId] = useState<number | null>(null);
     const [showNotif, setShowNotif] = useState(true);
+    const { processing, delete: destroy } = useForm();
 
     const handleStatusChange = (eventId: number, newStatus: string) => {
         router.put(
@@ -69,6 +71,35 @@ export default function event() {
                 return 'bg-green-100 text-green-700 hover:bg-green-300 hover:text-green-900';
         }
     };
+
+    function handleDelete(id: number, name: string) {
+            Swal.fire({
+                title: 'Are you sure you want to delete?',
+                text: `Event: ${name} `,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!',
+            }).then((result) => {
+    
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Deleted!',
+                        text: `Event: ${name} has been deleted.`,
+                        icon: 'success',
+                    });
+                    destroy(route('events.destroy', id), {
+                        onSuccess: () => {
+                            router.visit(route('events.index'), {
+                                preserveScroll: true,
+                                preserveState: false,
+                            });
+                        },
+                    });
+                }
+            });
+        }
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -177,14 +208,14 @@ export default function event() {
                                                 }}
                                             >
                                                 Edit
-                                            </Button>
+                                            </Button> */}
                                             <Button
                                                 disabled={processing}
-                                                onClick={() => handleDelete(key.student_id, key.first_name, key.last_name, key.middle_name)}
+                                                onClick={() => handleDelete(key.id, key.name)}
                                                 className="cursor-pointer bg-red-600 hover:bg-red-500 dark:bg-red-700 dark:text-white dark:hover:bg-red-600"
                                             >
                                                 Delete
-                                            </Button> */}
+                                            </Button>
                                         </TableCell>
                                     </TableRow>
                                 ))}

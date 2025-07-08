@@ -27,6 +27,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/events', [EventsController::class, 'store'])->name('events.store');
     Route::get('/events/create', [EventsController::class, 'create'])->name('events.create');
     Route::put('/events/{id}', [EventsController::class, 'changeStatus'])->name('events.changeStatus');
+    Route::delete('/events/{student_id}', [EventsController::class, 'destroy'])->name('events.destroy');
 
 });
 

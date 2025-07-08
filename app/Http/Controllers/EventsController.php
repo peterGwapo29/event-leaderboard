@@ -40,4 +40,10 @@ class EventsController extends Controller
 
         return redirect()->route('events.index')->with('message', 'Event status change successfully');
     }
+
+    public function destroy($id)
+    {
+        DB::table('events')->where('id', $id)->delete();
+        return redirect()->route('events.index')->with('message', 'Event deleted successfully.');
+    }
 }
