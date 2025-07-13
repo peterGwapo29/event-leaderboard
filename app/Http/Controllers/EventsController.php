@@ -30,11 +30,6 @@ class EventsController extends Controller
         return redirect()->route('events.index')->with('message', 'Events inserted successfully.');
     }
 
-    public function edit(Event $events)
-    {
-        return Inertia::render("Events/edit", compact('events'));
-    }
-
     public function update(Request $request, $id)
     {
         $request->validate([

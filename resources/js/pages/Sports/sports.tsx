@@ -7,6 +7,7 @@ import { Head, usePage } from '@inertiajs/react';
 import { CheckCheck, UserRoundPlus } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import CreateModal from './create';
+import EditModal from './edit'
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -33,6 +34,8 @@ export default function Dashboard() {
     const { flash, sports } = usePage<PageProps>().props;
     const [showModal, setShowModal] = useState(false);
     const [showNotif, setShowNotif] = useState(true);
+    const [selectedParticipant, setSelectedParticipant] = useState<Sports | null>(null);
+    const [showModalEdit, setShowModalEdit] = useState(false);
 
     useEffect(() => {
         if (flash?.message) {
@@ -71,15 +74,15 @@ export default function Dashboard() {
                         Add Sport
                     </Button>
 
-                    {/* {showModalEdit && selectedParticipant && (
+                    {showModalEdit && selectedParticipant && (
                         <EditModal
-                            participants={selectedParticipant}
+                            sports={selectedParticipant}
                             onClose={() => {
                                 setSelectedParticipant(null);
                                 setShowModalEdit(false);
                             }}
                         />
-                    )} */}
+                    )}
                 </div>
 
                 <div>
@@ -102,16 +105,16 @@ export default function Dashboard() {
                                               <TableCell>{key.name}</TableCell>
                                               <TableCell>{key.instructor}</TableCell>
                                               <TableCell className="flex flex-row justify-center gap-2 text-center">
-                                                  {/* <Button
+                                                  <Button
                                                 className="cursor-pointer bg-blue-500 hover:bg-blue-400 dark:bg-blue-700 dark:text-white dark:hover:bg-blue-600"
-                                                disabled={processing}
+                                                // disabled={processing}
                                                 onClick={() => {
                                                     setSelectedParticipant(key);
                                                     setShowModalEdit(true);
                                                 }}
                                             >
                                                 Edit
-                                            </Button> */}
+                                            </Button>
                                                   {/* <Button
                                                 disabled={processing}
                                                 onClick={() => handleDelete(key.id, key.first_name, key.last_name, key.middle_name)}

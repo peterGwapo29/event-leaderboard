@@ -29,4 +29,27 @@ class SportsController extends Controller
         Sports::create($request->all());
         return redirect()->route('sports.index')->with('message', 'Sports inserted successfully.');
     }
+
+   
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'instructor' => 'required|string',
+        ]);
+
+        $updated = DB::table('sports')
+            ->where('id', $id)
+            ->update([
+                'name' => $request->input('name'),
+                'instructor' => $request->input('instructor'),
+            ]);
+
+        if ($updated === 0) {
+            return redirect()->route('sports.index')->with('message', 'No changes made or sports not found.');
+        }
+
+        return redirect()->route('sports.index')->with('message', 'Sports updated successfully.');
+    }
 }

@@ -34,10 +34,6 @@ class ParticipantsController extends Controller
         Participants::create($request->all());
         return redirect()->route('participants.index')->with('message', 'Participants inserted successfully.');
     }
-    public function edit(Participants $participants)
-    {
-        return Inertia::render("Participants/edit", compact('participants'));
-    }
 
     public function update(Request $request, $student_id)
     {

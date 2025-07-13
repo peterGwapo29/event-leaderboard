@@ -6,44 +6,49 @@ import { Head, useForm } from '@inertiajs/react';
 import { TriangleAlert, X } from 'lucide-react';
 import React from 'react';
 
+interface Sports {
+    id: number;
+    name: string;
+    instructor: string;
+}
+
 interface Props {
+    sports: Sports;
     onClose: () => void;
 }
 
-export default function create({ onClose }: Props) {
-    const { data, setData, post, processing, errors } = useForm({
-        name: '',
-        instructor: '',
+export default function edit({ sports, onClose }: Props) {
+    const { data, setData, put, processing, errors } = useForm({
+        id: sports.id,
+        name: sports.name,
+        instructor: sports.instructor,
     });
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleUpdate = (e: React.FormEvent) => {
         e.preventDefault();
-        post(route('sports.store'), {
+        put(route('sports.update', sports.id), {
+            preserveScroll: true,
             onSuccess: () => {
-                setData({
-                    name: '',
-                    instructor: '',
-                });
                 onClose();
             },
-            preserveScroll: true,
         });
     };
 
     return (
         <>
-            <Head title="Create Sports" />
+            <Head title="Edit Sports" />
 
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-                <div className="relative w-full max-w-2xl rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">
+                <div className="relative w-full max-w-2xl rounded-lg bg-white p-6 dark:bg-gray-800">
+                    <strong>{`Update sports: ${sports.name} `}</strong>
                     <button
                         onClick={onClose}
-                        className="absolute top-3 right-3 cursor-pointer text-gray-500 hover:text-red-400 dark:hover:text-red-600"
+                        className="close-modal-edit absolute top-3 right-3 cursor-pointer text-gray-500 hover:text-red-400 dark:hover:text-red-600"
                     >
                         <X />
                     </button>
 
-                    <form onSubmit={handleSubmit} className="mt-4 space-y-4">
+                    <form onSubmit={handleUpdate} className="mt-4 space-y-4 text-start">
                         {Object.keys(errors).length > 0 && (
                             <Alert>
                                 <TriangleAlert className="icon" />
@@ -60,19 +65,21 @@ export default function create({ onClose }: Props) {
 
                         <div>
                             <Label htmlFor="name">Sport name</Label>
-                            <Input  value={data.name} 
-                                    placeholder="Sport name" 
-                                    onChange={(e) => setData('name', e.target.value)} 
-                                    className='dark:border dark:border-gray-100 dark:shadow-gray-900'
+                            <Input
+                                value={data.name}
+                                placeholder="Sport name"
+                                onChange={(e) => setData('name', e.target.value)}
+                                className="dark:border dark:border-gray-100 dark:shadow-gray-900"
                             />
                         </div>
 
                         <div>
                             <Label htmlFor="instructor">Assigned Instructor</Label>
-                            <Input  value={data.instructor} 
-                                    placeholder="Instructor" 
-                                    onChange={(e) => setData('instructor', e.target.value)} 
-                                    className='dark:border dark:border-gray-100 dark:shadow-gray-900'
+                            <Input
+                                value={data.instructor}
+                                placeholder="Instructor"
+                                onChange={(e) => setData('instructor', e.target.value)}
+                                className="dark:border dark:border-gray-100 dark:shadow-gray-900"
                             />
                         </div>
 
