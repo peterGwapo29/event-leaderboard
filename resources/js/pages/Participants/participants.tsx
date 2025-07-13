@@ -123,7 +123,9 @@ export default function participants() {
                 </div>
 
                 <div>
-                    {sortedParticipants.length > 0 && (
+                    {sortedParticipants.length == 0 
+                    ? 'No list of participants'
+                    : sortedParticipants.length > 0 && (
                         <Table>
                             <TableHeader>
                                 <TableRow>

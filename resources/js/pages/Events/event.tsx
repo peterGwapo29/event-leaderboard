@@ -143,7 +143,9 @@ export default function event() {
                 </div>
 
                 <div>
-                    {events.length > 0 && (
+                    {events.length == 0 
+                    ? 'No list of events'
+                    : events.length > 0 && (
                         <Table>
                             <TableHeader>
                                 <TableRow>

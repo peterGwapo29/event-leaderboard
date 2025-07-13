@@ -117,7 +117,7 @@ export default function Dashboard() {
 
                 <div>
                     {sports.length == 0
-                        ? 'No list of invoices'
+                        ? 'No list of sports'
                         : sports.length > 0 && (
                               <Table>
                                   <TableHeader>
