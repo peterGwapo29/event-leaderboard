@@ -15,18 +15,31 @@ export default function create({ onClose }: Props) {
         name: '',
         description: '',
         category: '',
-        status: 'Ongoing',
+        start_time: '',
+        end_time: '',
+        status: 'Upcoming',
     });
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+
+        const start = new Date(data.start_time);
+    const end = new Date(data.end_time);
+
+    if (start >= end) {
+        alert('End time must be later than start time.');
+        return;
+    }
+    
         post(route('events.store'), {
             onSuccess: () => {
                 setData({
                     name: '',
                     description: '',
                     category: '',
-                    status: 'Ongoing',
+                    start_time: '',
+                    end_time: '',
+                    status: 'Upcoming',
                 });
                 onClose();
             },
@@ -85,6 +98,24 @@ export default function create({ onClose }: Props) {
                             <Input  value={data.category} 
                                     placeholder="Category" 
                                     onChange={(e) => setData('category', e.target.value)} 
+                                    className='dark:border dark:border-gray-100 dark:shadow-gray-900'
+                            />
+                        </div>
+
+                        <div>
+                            <Label htmlFor="start_time">Start Time</Label>
+                            <Input type="datetime-local" 
+                                    value={data.start_time} 
+                                    placeholder="Start Time" 
+                                    onChange={(e) => setData('start_time', e.target.value)} 
+                                    className='dark:border dark:border-gray-100 dark:shadow-gray-900'
+                            />
+                        </div>
+                        <div>
+                            <Label htmlFor="end_time">End Time</Label>
+                            <Input  type="datetime-local" value={data.end_time} 
+                                    placeholder="End Time" 
+                                    onChange={(e) => setData('end_time', e.target.value)} 
                                     className='dark:border dark:border-gray-100 dark:shadow-gray-900'
                             />
                         </div>

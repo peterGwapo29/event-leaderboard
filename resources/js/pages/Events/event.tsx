@@ -23,6 +23,8 @@ interface Events {
     name: string;
     description: string;
     category: string;
+    start_time: string;
+    end_time: string;
     status: string;
 }
 
@@ -102,6 +104,24 @@ export default function event() {
             });
         }
 
+        function formatEventDateTime(start: string, end: string): string {
+            const startDate = new Date(start);
+            const endDate = new Date(end);
+
+            const dateStr = startDate.toLocaleDateString('en-CA').replaceAll('-', '/');
+            const dateEndStr = endDate.toLocaleDateString('en-CA').replaceAll('-', '/');
+            const options: Intl.DateTimeFormatOptions = {
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true,
+            };
+            const startTimeStr = startDate.toLocaleTimeString('en-US', options);
+            const endTimeStr = endDate.toLocaleTimeString('en-US', options);
+
+            return `${dateStr} - ${startTimeStr} until ${dateEndStr} - ${endTimeStr}`;
+        }
+
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Events" />
@@ -153,6 +173,7 @@ export default function event() {
                                     <TableHead>Name</TableHead>
                                     <TableHead>Description</TableHead>
                                     <TableHead>Category</TableHead>
+                                    <TableHead>Date & Time (YY/MM/DD)</TableHead>
                                     <TableHead className="text-center">Status</TableHead>
                                     <TableHead className="text-center">Action</TableHead>
                                 </TableRow>
@@ -164,6 +185,9 @@ export default function event() {
                                         <TableCell className="font-medium">{key.name}</TableCell>
                                         <TableCell className='max-w-0 truncate'>{key.description}</TableCell>
                                         <TableCell>{key.category}</TableCell>
+                                        <TableCell>
+                                            {formatEventDateTime(key.start_time, key.end_time)}
+                                        </TableCell>
                                         <TableCell className="text-center">
                                             <Popover
                                                 open={openPopoverId === key.id}

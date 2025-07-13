@@ -24,6 +24,8 @@ class EventsController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'category' => 'required|string|max:255',
+            'start_time' => 'required|date_format:Y-m-d\TH:i',
+            'end_time' => 'required|date_format:Y-m-d\TH:i',
         ]);
 
         Event::create($request->all());
@@ -36,6 +38,8 @@ class EventsController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'category' => 'required|string|max:255',
+            'start_time' => 'required|date_format:Y-m-d\TH:i',
+            'end_time' => 'required|date_format:Y-m-d\TH:i',
         ]);
 
         $updated = DB::table('events')
@@ -45,6 +49,8 @@ class EventsController extends Controller
                 'name' => $request->input('name'),
                 'description' => $request->input('description'),
                 'category' => $request->input('category'),
+                'start_time' => $request->input('start_time'),
+                'end_time' => $request->input('end_time'),
             ]);
 
         if ($updated === 0) {
