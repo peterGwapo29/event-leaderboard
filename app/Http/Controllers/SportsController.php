@@ -52,4 +52,10 @@ class SportsController extends Controller
 
         return redirect()->route('sports.index')->with('message', 'Sports updated successfully.');
     }
+
+    public function destroy($id)
+    {
+        DB::table('sports')->where('id', $id)->delete();
+        return redirect()->route('sports.index')->with('message', 'Sports deleted successfully.');
+    }
 }

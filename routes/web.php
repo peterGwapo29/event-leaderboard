@@ -35,6 +35,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/sports', [SportsController::class, 'store'])->name('sports.store');
     Route::get('/sports/create', [SportsController::class, 'create'])->name('sports.create');
     Route::put('/sports/{id}', [SportsController::class, 'update'])->name('sports.update');
+    Route::delete('/sports/{id}', [SportsController::class, 'destroy'])->name('sports.destroy');
 
 
 });

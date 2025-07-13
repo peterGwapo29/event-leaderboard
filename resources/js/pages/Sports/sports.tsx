@@ -3,11 +3,12 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head, usePage } from '@inertiajs/react';
+import { Head, router, useForm, usePage } from '@inertiajs/react';
 import { CheckCheck, UserRoundPlus } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import CreateModal from './create';
-import EditModal from './edit'
+import EditModal from './edit';
+import Swal from 'sweetalert2';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -36,6 +37,7 @@ export default function Dashboard() {
     const [showNotif, setShowNotif] = useState(true);
     const [selectedParticipant, setSelectedParticipant] = useState<Sports | null>(null);
     const [showModalEdit, setShowModalEdit] = useState(false);
+    const { processing, delete: destroy } = useForm();
 
     useEffect(() => {
         if (flash?.message) {
@@ -44,6 +46,34 @@ export default function Dashboard() {
             return () => clearTimeout(timeout);
         }
     }, [flash?.message]);
+
+    function handleDelete(id: number, name: string, instructor: string) {
+                Swal.fire({
+                    title: 'Are you sure you want to delete?',
+                    text: `Sports: ${name} `,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!',
+                }).then((result) => {
+        
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: 'Deleted!',
+                            text: `Sports: ${name} has been deleted.`,
+                            icon: 'success',
+                        });
+                        destroy(route('sports.destroy', id), {
+                            onSuccess: () => {
+                                router.visit(route('sports.index'), {
+                                    preserveScroll: true,
+                                });
+                            },
+                        });
+                    }
+                });
+            }
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -87,7 +117,7 @@ export default function Dashboard() {
 
                 <div>
                     {sports.length == 0
-                        ? 'No invoices'
+                        ? 'No list of invoices'
                         : sports.length > 0 && (
                               <Table>
                                   <TableHeader>
@@ -106,22 +136,22 @@ export default function Dashboard() {
                                               <TableCell>{key.instructor}</TableCell>
                                               <TableCell className="flex flex-row justify-center gap-2 text-center">
                                                   <Button
-                                                className="cursor-pointer bg-blue-500 hover:bg-blue-400 dark:bg-blue-700 dark:text-white dark:hover:bg-blue-600"
-                                                // disabled={processing}
-                                                onClick={() => {
-                                                    setSelectedParticipant(key);
-                                                    setShowModalEdit(true);
-                                                }}
-                                            >
-                                                Edit
-                                            </Button>
-                                                  {/* <Button
-                                                disabled={processing}
-                                                onClick={() => handleDelete(key.id, key.first_name, key.last_name, key.middle_name)}
-                                                className="cursor-pointer bg-red-600 hover:bg-red-500 dark:bg-red-700 dark:text-white dark:hover:bg-red-600"
-                                            >
-                                                Delete
-                                            </Button> */}
+                                                      className="cursor-pointer bg-blue-500 hover:bg-blue-400 dark:bg-blue-700 dark:text-white dark:hover:bg-blue-600"
+                                                      disabled={processing}
+                                                      onClick={() => {
+                                                          setSelectedParticipant(key);
+                                                          setShowModalEdit(true);
+                                                      }}
+                                                  >
+                                                      Edit
+                                                  </Button>
+                                                  <Button
+                                                      disabled={processing}
+                                                      onClick={() => handleDelete(key.id, key.name, key.instructor)}
+                                                      className="cursor-pointer bg-red-600 hover:bg-red-500 dark:bg-red-700 dark:text-white dark:hover:bg-red-600"
+                                                  >
+                                                      Delete
+                                                  </Button>
                                               </TableCell>
                                           </TableRow>
                                       ))}
