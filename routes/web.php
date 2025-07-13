@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\EventsController;
 use App\Http\Controllers\ParticipantsController;
+use App\Http\Controllers\SportsController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -30,6 +31,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('/events/{id}/update', [EventsController::class, 'update'])->name('events.update');
     Route::put('/events/{id}', [EventsController::class, 'changeStatus'])->name('events.changeStatus');
     Route::delete('/events/{student_id}', [EventsController::class, 'destroy'])->name('events.destroy');
+
+    //Sports
+    Route::get('/sports', [SportsController::class, 'index'])->name('sports.index');
+    Route::post('/sports', [SportsController::class, 'store'])->name('sports.store');
+    Route::get('/sports/create', [SportsController::class, 'create'])->name('sports.create');
+
 
 });
 

@@ -13,20 +13,16 @@ interface Props {
 export default function create({ onClose }: Props) {
     const { data, setData, post, processing, errors } = useForm({
         name: '',
-        description: '',
-        category: '',
-        status: 'Ongoing',
+        instructor: '',
     });
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        post(route('events.store'), {
+        post(route('sports.store'), {
             onSuccess: () => {
                 setData({
                     name: '',
-                    description: '',
-                    category: '',
-                    status: 'Ongoing',
+                    instructor: '',
                 });
                 onClose();
             },
@@ -36,7 +32,7 @@ export default function create({ onClose }: Props) {
 
     return (
         <>
-            <Head title="Create Participant" />
+            <Head title="Create Sports" />
 
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
                 <div className="relative w-full max-w-2xl rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">
@@ -63,28 +59,19 @@ export default function create({ onClose }: Props) {
                         )}
 
                         <div>
-                            <Label htmlFor="name">Event name</Label>
+                            <Label htmlFor="name">Sport name</Label>
                             <Input  value={data.name} 
-                                    placeholder="Event name" 
+                                    placeholder="Sport name" 
                                     onChange={(e) => setData('name', e.target.value)} 
                                     className='dark:border dark:border-gray-100 dark:shadow-gray-900'
                             />
                         </div>
 
                         <div>
-                            <Label htmlFor="description">Description</Label>
-                            <Input  value={data.description} 
-                                    placeholder="Description" 
-                                    onChange={(e) => setData('description', e.target.value)} 
-                                    className='dark:border dark:border-gray-100 dark:shadow-gray-900'
-                            />
-                        </div>
-
-                        <div>
-                            <Label htmlFor="category">Category</Label>
-                            <Input  value={data.category} 
-                                    placeholder="Category" 
-                                    onChange={(e) => setData('category', e.target.value)} 
+                            <Label htmlFor="description">Assigned Instructor</Label>
+                            <Input  value={data.instructor} 
+                                    placeholder="Instructor" 
+                                    onChange={(e) => setData('instructor', e.target.value)} 
                                     className='dark:border dark:border-gray-100 dark:shadow-gray-900'
                             />
                         </div>

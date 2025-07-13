@@ -67,7 +67,6 @@ export default function participants() {
                     onSuccess: () => {
                         router.visit(route('participants.index'), {
                             preserveScroll: true,
-                            preserveState: false,
                         });
                     },
                 });

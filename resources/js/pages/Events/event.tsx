@@ -51,7 +51,6 @@ export default function event() {
             },
             {
                 preserveScroll: true,
-                preserveState: false,
             },
         );
     };
@@ -67,11 +66,11 @@ export default function event() {
     const getStatusClass = (status: string) => {
         switch (status.toLowerCase()) {
             case 'upcoming':
-                return 'bg-blue-100 text-blue-700 hover:bg-blue-200 hover:text-blue-800';
+                return 'bg-blue-100 text-blue-700 hover:bg-blue-200 hover:text-blue-800 dark:bg-blue-300 dark:text-blue-800 dark:hover:bg-blue-400 dark:hover:text-blue-900';
             case 'completed':
-                return 'bg-gray-200 text-gray-800 hover:bg-gray-300 hover:text-gray-900';
+                return 'bg-gray-200 text-gray-800 hover:bg-gray-300 hover:text-gray-900 dark:bg-gray-300 dark:text-gray-800 dark:hover:bg-gray-400 dark:hover:text-gray-900';
             case 'ongoing':
-                return 'bg-green-100 text-green-700 hover:bg-green-300 hover:text-green-900';
+                return 'bg-green-100 text-green-700 hover:bg-green-300 hover:text-green-900 dark:bg-green-400 text-green-800 dark:hover:bg-green-500 dark:hover:text-green-900';
         }
     };
 
@@ -96,7 +95,6 @@ export default function event() {
                         onSuccess: () => {
                             router.visit(route('events.index'), {
                                 preserveScroll: true,
-                                preserveState: false,
                             });
                         },
                     });

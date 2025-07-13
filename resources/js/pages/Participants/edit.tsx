@@ -35,7 +35,6 @@ export default function edit( { participants, onClose }: Props) {
         e.preventDefault();
         put(route('participants.update', participants.student_id), {
         preserveScroll: true,
-        preserveState: false,
         onSuccess: () => {
             onClose();
         },
@@ -74,29 +73,43 @@ export default function edit( { participants, onClose }: Props) {
                                 value={data.student_id}
                                 placeholder="Student ID"
                                 onChange={(e) => setData('student_id', e.target.value)}
-                                className="no-spinner"
+                                className="no-spinner dark:border dark:border-gray-100 dark:shadow-gray-900"
                             />
                         </div>
 
                         <div className="flex flex-col gap-4 md:flex-row md:gap-5">
                             <div className="flex-1">
                                 <Label htmlFor="first_name">Firstname</Label>
-                                <Input value={data.first_name} placeholder="Firstname" onChange={(e) => setData('first_name', e.target.value)} />
+                                <Input  value={data.first_name} 
+                                        placeholder="Firstname" 
+                                        onChange={(e) => setData('first_name', e.target.value)}
+                                        className='dark:border dark:border-gray-100 dark:shadow-gray-900' 
+                                />
                             </div>
                             <div className="flex-1">
                                 <Label htmlFor="last_name">Lastname</Label>
-                                <Input value={data.last_name} placeholder="Lastname" onChange={(e) => setData('last_name', e.target.value)} />
+                                <Input  value={data.last_name} 
+                                        placeholder="Lastname" 
+                                        onChange={(e) => setData('last_name', e.target.value)} 
+                                        className='dark:border dark:border-gray-100 dark:shadow-gray-900'
+                                />
                             </div>
                             <div className="flex-1">
                                 <Label htmlFor="middle_name">Middlename</Label>
-                                <Input value={data.middle_name} placeholder="Middlename" onChange={(e) => setData('middle_name', e.target.value)} />
+                                <Input  value={data.middle_name} 
+                                        placeholder="Middlename" 
+                                        onChange={(e) => setData('middle_name', e.target.value)} 
+                                        className='dark:border dark:border-gray-100 dark:shadow-gray-900'
+                                />
                             </div>
                         </div>
 
                         <div className='flex flex-col w-full gap-2'>
                             <div className='flex flex-col'>
                                 <Label htmlFor="course">Course</Label>
-                                <select value={data.course} onChange={(e) => setData('course', e.target.value)} className="form-select border border-gray-200 shadow-xs rounded-md w-full p-2">
+                                <select value={data.course} 
+                                        onChange={(e) => setData('course', e.target.value)} 
+                                        className="form-select cursor-pointer border border-gray-200 shadow-xs rounded-md w-full p-2 dark:bg-gray-800">
                                     <option value="" hidden>
                                         Select Course
                                     </option>
@@ -109,7 +122,9 @@ export default function edit( { participants, onClose }: Props) {
 
                              <div className='flex flex-col'>
                                 <Label htmlFor="year_level">Year Level</Label>
-                                <select value={data.year_level} onChange={(e) => setData('year_level', Number(e.target.value))} className="form-select border border-gray-200 shadow-xs rounded-md w-full p-2">
+                                <select value={data.year_level} 
+                                        onChange={(e) => setData('year_level', Number(e.target.value))} 
+                                        className="form-select border border-gray-200 shadow-xs rounded-md w-full p-2 cursor-pointer dark:bg-gray-800">
                                     <option value="" hidden>
                                         Select Year Level
                                     </option>

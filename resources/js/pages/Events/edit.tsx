@@ -33,7 +33,6 @@ export default function edit( { events, onClose }: Props) {
         e.preventDefault();
         put(route('events.update', events.id), {
         preserveScroll: true,
-        preserveState: false,
         onSuccess: () => {
             onClose();
         },
@@ -66,32 +65,32 @@ export default function edit( { events, onClose }: Props) {
                             </Alert>
                         )}
 
-                        <div>
-                            <Label htmlFor="id">Event ID</Label>
-                            <Input
-                                value={data.id}
-                                placeholder="Event ID"
-                                onChange={(e) => setData('id', Number(e.target.value))}
-                                className="no-spinner"
-                            />
-                        </div>
-
-                        <div className="flex flex-col gap-4 md:flex-row md:gap-5">
                             <div>
                                 <Label htmlFor="name">Event name</Label>
-                                <Input value={data.name} placeholder="Event name" onChange={(e) => setData('name', e.target.value)} />
+                                <Input  value={data.name} 
+                                        placeholder="Event name" 
+                                        onChange={(e) => setData('name', e.target.value)} 
+                                        className='dark:border dark:border-gray-100 dark:shadow-gray-900'
+                                />
                             </div>
                         
                             <div>
                                 <Label htmlFor="description">Description</Label>
-                                <Input value={data.description} placeholder="Description" onChange={(e) => setData('description', e.target.value)} />
+                                <Input  value={data.description} 
+                                        placeholder="Description" 
+                                        onChange={(e) => setData('description', e.target.value)} 
+                                        className='dark:border dark:border-gray-100 dark:shadow-gray-900'
+                                />
                             </div>
                         
                             <div>
                                 <Label htmlFor="category">Category</Label>
-                                <Input value={data.category} placeholder="Category" onChange={(e) => setData('category', e.target.value)} />
+                                <Input  value={data.category} 
+                                        placeholder="Category" 
+                                        onChange={(e) => setData('category', e.target.value)} 
+                                        className='dark:border dark:border-gray-100 dark:shadow-gray-900'
+                                />
                             </div>
-                        </div>
 
                         <Button 
                             disabled={processing} 

@@ -38,7 +38,6 @@ export default function create({ onClose }: Props) {
                 onClose();
             },
                 preserveScroll: true,
-                preserveState: false,
         });
     }
 
@@ -95,7 +94,9 @@ export default function create({ onClose }: Props) {
                         <div className='flex flex-col w-full gap-2'>
                             <div className=''>
                                 <Label htmlFor="course">Course</Label>
-                                <select value={data.course} onChange={(e) => setData('course', e.target.value)} className="form-select border border-gray-200 shadow-xs rounded-md w-full p-2 dark:bg-gray-800">
+                                <select value={data.course} 
+                                        onChange={(e) => setData('course', e.target.value)} 
+                                        className="form-select border border-gray-200 shadow-xs rounded-md w-full p-2 dark:bg-gray-800">
                                     <option value="" hidden>
                                         Select Course
                                     </option>
@@ -108,7 +109,9 @@ export default function create({ onClose }: Props) {
 
                              <div>
                                 <Label htmlFor="year_level">Year Level</Label>
-                                <select value={data.year_level} onChange={(e) => setData('year_level', e.target.value)} className="dark:bg-gray-800 form-select border border-gray-200 shadow-xs rounded-md w-full p-2">
+                                <select value={data.year_level} 
+                                        onChange={(e) => setData('year_level', e.target.value)}
+                                        className="dark:bg-gray-800 form-select border border-gray-200 shadow-xs rounded-md w-full p-2">
                                     <option value="" hidden>
                                         Select Year Level
                                     </option>
