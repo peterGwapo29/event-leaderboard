@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Models\Event;
+use App\Models\Sports;
 use Illuminate\Support\Facades\DB;
 
 class EventsController extends Controller
@@ -13,9 +14,12 @@ class EventsController extends Controller
         return Inertia::render("Events/event", compact('events'));
     }
 
-     public function create()
+    public function create()
     {
-        return Inertia::render("Events/create");
+        $sports = Sports::select('id', 'name')->get();
+        return Inertia::render("Events/create", [
+            'sports' => $sports,
+        ]);
     }
 
     public function store(Request $request)
